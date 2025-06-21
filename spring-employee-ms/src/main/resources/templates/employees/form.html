@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::#content})}">
+<head>
+    <title th:text="${pageTitle}">Employee Form</title>
+</head>
+<body>
+    <div id="content">
+        <!-- Page Header -->
+        <div class="row mb-4">
+            <div class="col-md-8">
+                <h1 class="h3 mb-0">
+                    <i class="fas fa-user-edit me-2 text-primary"></i>
+                    <span th:text="${pageTitle}">Employee Form</span>
+                </h1>
+                <p class="text-muted">Fill in the employee information below</p>
+            </div>
+            <div class="col-md-4 text-end">
+                <a th:href="@{/employees}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i>Back to List
+                </a>
+            </div>
+        </div>
+
+        <!-- Employee Form -->
+        <div class="row justify-content-center">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0">
+                            <i class="fas fa-user me-2"></i>Employee Information
+                        </h5>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="${employee.id != null ? '/employees/edit/' + employee.id : '/employees/add'}" 
+                              th:object="${employee}" method="post" novalidate>
+                            
+                            <!-- Personal Information -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h6 class="text-primary border-bottom pb-2 mb-3">
+                                        <i class="fas fa-user-circle me-1"></i>Personal Information
+                                    </h6>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="firstName" class="form-label">First Name <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="firstName" th:field="*{firstName}"
+                                           th:classappend="${#fields.hasErrors('firstName')} ? 'is-invalid' : ''"
+                                           placeholder="Enter first name" required>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('firstName')}" 
+                                         th:errors="*{firstName}"></div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="lastName" class="form-label">Last Name <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="lastName" th:field="*{lastName}"
+                                           th:classappend="${#fields.hasErrors('lastName')} ? 'is-invalid' : ''"
+                                           placeholder="Enter last name" required>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('lastName')}" 
+                                         th:errors="*{lastName}"></div>
+                                </div>
+                                
+                                <div class="col-12 mb-3">
+                                    <label for="email" class="form-label">Email Address <span class="text-danger">*</span></label>
+                                    <input type="email" class="form-control" id="email" th:field="*{email}"
+                                           th:classappend="${#fields.hasErrors('email')} ? 'is-invalid' : ''"
+                                           placeholder="Enter email address" required>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('email')}" 
+                                         th:errors="*{email}"></div>
+                                </div>
+                            </div>
+
+                            <!-- Work Information -->
+                            <div class="row mb-4">
+                                <div class="col-12">
+                                    <h6 class="text-primary border-bottom pb-2 mb-3">
+                                        <i class="fas fa-briefcase me-1"></i>Work Information
+                                    </h6>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="department" class="form-label">Department <span class="text-danger">*</span></label>
+                                    <select class="form-select" id="department" th:field="*{department}"
+                                            th:classappend="${#fields.hasErrors('department')} ? 'is-invalid' : ''" required>
+                                        <option value="">Select Department</option>
+                                        <option th:each="dept : ${departments}" th:value="${dept}" th:text="${dept}"></option>
+                                    </select>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('department')}" 
+                                         th:errors="*{department}"></div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="position" class="form-label">Position <span class="text-danger">*</span></label>
+                                    <input type="text" class="form-control" id="position" th:field="*{position}"
+                                           th:classappend="${#fields.hasErrors('position')} ? 'is-invalid' : ''"
+                                           placeholder="Enter position/job title" required>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('position')}" 
+                                         th:errors="*{position}"></div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="hireDate" class="form-label">Hire Date <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" id="hireDate" th:field="*{hireDate}"
+                                           th:classappend="${#fields.hasErrors('hireDate')} ? 'is-invalid' : ''" required>
+                                    <div class="invalid-feedback" th:if="${#fields.hasErrors('hireDate')}" 
+                                         th:errors="*{hireDate}"></div>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <label for="salary" class="form-label">Salary</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text">$</span>
+                                        <input type="number" class="form-control" id="salary" th:field="*{salary}"
+                                               th:classappend="${#fields.hasErrors('salary')} ? 'is-invalid' : ''"
+                                               placeholder="Enter salary" step="0.01" min="0">
+                                        <div class="invalid-feedback" th:if="${#fields.hasErrors('salary')}" 
+                                             th:errors="*{salary}"></div>
+                                    </div>
+                                    <div class="form-text">Optional: Leave blank if not specified</div>
+                                </div>
+                            </div>
+
+                            <!-- Status Information -->
+                            <div class="row mb-4" th:if="${employee.id != null}">
+                                <div class="col-12">
+                                    <h6 class="text-primary border-bottom pb-2 mb-3">
+                                        <i class="fas fa-info-circle me-1"></i>Status Information
+                                    </h6>
+                                </div>
+                                
+                                <div class="col-md-6 mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="isActive" th:field="*{isActive}">
+                                        <label class="form-check-label" for="isActive">
+                                            Active Employee
+                                        </label>
+                                    </div>
+                                    <div class="form-text">Uncheck to deactivate this employee</div>
+                                </div>
+                            </div>
+
+                            <!-- Form Actions -->
+                            <div class="row">
+                                <div class="col-12">
+                                    <hr class="mb-4">
+                                    <div class="d-flex justify-content-between">
+                                        <a th:href="@{/employees}" class="btn btn-outline-secondary">
+                                            <i class="fas fa-times me-1"></i>Cancel
+                                        </a>
+                                        <div>
+                                            <button type="reset" class="btn btn-outline-warning me-2">
+                                                <i class="fas fa-undo me-1"></i>Reset
+                                            </button>
+                                            <button type="submit" class="btn btn-primary">
+                                                <i class="fas fa-save me-1"></i>
+                                                <span th:text="${employee.id != null ? 'Update Employee' : 'Add Employee'}">Save</span>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Set max date for hire date to today
+        document.addEventListener('DOMContentLoaded', function() {
+            const hireDateInput = document.getElementById('hireDate');
+            const today = new Date().toISOString().split('T')[0];
+            hireDateInput.setAttribute('max', today);
+        });
+
+        // Form validation
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
+</body>
+</html>

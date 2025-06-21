@@ -1,0 +1,76 @@
+version: '3.8'
+
+services:
+  # MySQL Database
+  mysql:
+    image: mysql:8.0
+    container_name: employee_mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: password
+      MYSQL_DATABASE: employee_management
+      MYSQL_USER: emp_user
+      MYSQL_PASSWORD: emp_password
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./spring-employee-ms/database-setup.sql:/docker-entrypoint-initdb.d/database-setup.sql
+    command: --default-authentication-plugin=mysql_native_password
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+    networks:
+      - employee-network
+
+  # Spring Boot Backend
+  backend:
+    build: 
+      context: ./spring-employee-ms
+      dockerfile: Dockerfile
+    container_name: employee_backend
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/employee_management?useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: false
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/demo/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - employee-network
+
+  # React Frontend
+  frontend:
+    build:
+      context: ./ems
+      dockerfile: Dockerfile
+    container_name: employee_frontend
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    environment:
+      REACT_APP_API_URL: http://localhost:8080/api
+    networks:
+      - employee-network
+
+volumes:
+  mysql_data:
+
+networks:
+  employee-network:
+    driver: bridge

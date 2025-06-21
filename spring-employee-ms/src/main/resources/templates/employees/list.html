@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" th:replace="~{layout :: layout(~{::title}, ~{::#content})}">
+<head>
+    <title>Employee List</title>
+</head>
+<body>
+    <div id="content">
+        <!-- Page Header -->
+        <div class="row mb-4">
+            <div class="col-md-6">
+                <h1 class="h3 mb-0">
+                    <i class="fas fa-users me-2 text-primary"></i>Employee Management
+                </h1>
+                <p class="text-muted">Manage your organization's employees</p>
+            </div>
+            <div class="col-md-6 text-end">
+                <a th:href="@{/employees/add}" class="btn btn-primary">
+                    <i class="fas fa-plus me-1"></i>Add New Employee
+                </a>
+            </div>
+        </div>
+
+        <!-- Statistics Cards -->
+        <div class="row mb-4" th:if="${statistics}">
+            <div class="col-md-3">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="card-title" th:text="${statistics.totalEmployees}">0</h4>
+                                <p class="card-text">Total Employees</p>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-users fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-success text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="card-title" th:text="${#maps.size(statistics.departmentStats)}">0</h4>
+                                <p class="card-text">Departments</p>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-building fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-info text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="card-title" th:text="${totalItems}">0</h4>
+                                <p class="card-text">Search Results</p>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-search fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card bg-warning text-white">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h4 class="card-title" th:text="${currentPage + 1}">1</h4>
+                                <p class="card-text">Current Page</p>
+                            </div>
+                            <div class="align-self-center">
+                                <i class="fas fa-file-alt fa-2x"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search and Filter -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <form th:action="@{/employees}" method="get" class="row g-3">
+                    <div class="col-md-4">
+                        <label for="search" class="form-label">Search</label>
+                        <input type="text" class="form-control" id="search" name="search" 
+                               th:value="${search}" placeholder="Search by name, email, or position...">
+                    </div>
+                    <div class="col-md-3">
+                        <label for="department" class="form-label">Department</label>
+                        <select class="form-select" id="department" name="department">
+                            <option value="">All Departments</option>
+                            <option th:each="dept : ${departments}" 
+                                    th:value="${dept}" 
+                                    th:text="${dept}"
+                                    th:selected="${dept == selectedDepartment}"></option>
+                        </select>
+                    </div>
+                    <div class="col-md-2">
+                        <label for="size" class="form-label">Per Page</label>
+                        <select class="form-select" id="size" name="size">
+                            <option th:value="5" th:selected="${size == 5}">5</option>
+                            <option th:value="10" th:selected="${size == 10}">10</option>
+                            <option th:value="25" th:selected="${size == 25}">25</option>
+                            <option th:value="50" th:selected="${size == 50}">50</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button type="submit" class="btn btn-outline-primary me-2">
+                            <i class="fas fa-search me-1"></i>Search
+                        </button>
+                        <a th:href="@{/employees}" class="btn btn-outline-secondary">
+                            <i class="fas fa-times me-1"></i>Clear
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Employee Table -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <i class="fas fa-list me-2"></i>Employee List
+                    <span class="badge bg-primary ms-2" th:text="${totalItems}">0</span>
+                </h5>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>
+                                    <a th:href="@{/employees(sortBy='id', sortDirection=${sortBy == 'id' and sortDirection == 'asc' ? 'desc' : 'asc'}, search=${search}, department=${selectedDepartment}, size=${size})}" 
+                                       class="text-decoration-none">
+                                        ID <i class="fas fa-sort"></i>
+                                    </a>
+                                </th>
+                                <th>
+                                    <a th:href="@{/employees(sortBy='firstName', sortDirection=${sortBy == 'firstName' and sortDirection == 'asc' ? 'desc' : 'asc'}, search=${search}, department=${selectedDepartment}, size=${size})}" 
+                                       class="text-decoration-none">
+                                        Name <i class="fas fa-sort"></i>
+                                    </a>
+                                </th>
+                                <th>Email</th>
+                                <th>
+                                    <a th:href="@{/employees(sortBy='department', sortDirection=${sortBy == 'department' and sortDirection == 'asc' ? 'desc' : 'asc'}, search=${search}, department=${selectedDepartment}, size=${size})}" 
+                                       class="text-decoration-none">
+                                        Department <i class="fas fa-sort"></i>
+                                    </a>
+                                </th>
+                                <th>Position</th>
+                                <th>
+                                    <a th:href="@{/employees(sortBy='hireDate', sortDirection=${sortBy == 'hireDate' and sortDirection == 'asc' ? 'desc' : 'asc'}, search=${search}, department=${selectedDepartment}, size=${size})}" 
+                                       class="text-decoration-none">
+                                        Hire Date <i class="fas fa-sort"></i>
+                                    </a>
+                                </th>
+                                <th>Salary</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="employee : ${employees}">
+                                <td th:text="${employee.id}"></td>
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <div class="avatar-circle me-2">
+                                            <span th:text="${employee.firstName?.substring(0,1) + employee.lastName?.substring(0,1)}"></span>
+                                        </div>
+                                        <span th:text="${employee.fullName}"></span>
+                                    </div>
+                                </td>
+                                <td th:text="${employee.email}"></td>
+                                <td>
+                                    <span class="badge bg-secondary" th:text="${employee.department}"></span>
+                                </td>
+                                <td th:text="${employee.position}"></td>
+                                <td th:text="${#temporals.format(employee.hireDate, 'MMM dd, yyyy')}"></td>
+                                <td>
+                                    <span th:if="${employee.salary}" th:text="'$' + ${#numbers.formatDecimal(employee.salary, 0, 'COMMA', 2, 'POINT')}"></span>
+                                    <span th:unless="${employee.salary}" class="text-muted">Not specified</span>
+                                </td>
+                                <td>
+                                    <div class="btn-group" role="group">
+                                        <a th:href="@{/employees/view/{id}(id=${employee.id})}"
+                                           class="btn btn-sm btn-outline-info" title="View">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a th:href="@{/employees/edit/{id}(id=${employee.id})}"
+                                           class="btn btn-sm btn-outline-primary" title="Edit">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <button type="button" class="btn btn-sm btn-outline-danger"
+                                                th:onclick="'confirmDelete(' + ${employee.id} + ', \'' + ${employee.fullName} + '\')'" title="Delete">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr th:if="${#lists.isEmpty(employees)}">
+                                <td colspan="8" class="text-center py-4">
+                                    <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                                    <p class="text-muted">No employees found</p>
+                                    <a th:href="@{/employees/add}" class="btn btn-primary">
+                                        <i class="fas fa-plus me-1"></i>Add First Employee
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <nav th:if="${totalPages > 1}" class="mt-4">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${!hasPrevious ? 'disabled' : ''}">
+                    <a class="page-link" th:href="@{/employees(page=${currentPage - 1}, size=${size}, sortBy=${sortBy}, sortDirection=${sortDirection}, search=${search}, department=${selectedDepartment})}">
+                        <i class="fas fa-chevron-left"></i> Previous
+                    </a>
+                </li>
+                
+                <li th:each="pageNum : ${#numbers.sequence(0, totalPages - 1)}" 
+                    class="page-item" th:classappend="${pageNum == currentPage ? 'active' : ''}">
+                    <a class="page-link" th:href="@{/employees(page=${pageNum}, size=${size}, sortBy=${sortBy}, sortDirection=${sortDirection}, search=${search}, department=${selectedDepartment})}" 
+                       th:text="${pageNum + 1}"></a>
+                </li>
+                
+                <li class="page-item" th:classappend="${!hasNext ? 'disabled' : ''}">
+                    <a class="page-link" th:href="@{/employees(page=${currentPage + 1}, size=${size}, sortBy=${sortBy}, sortDirection=${sortDirection}, search=${search}, department=${selectedDepartment})}">
+                        Next <i class="fas fa-chevron-right"></i>
+                    </a>
+                </li>
+            </ul>
+        </nav>
+
+        <!-- Delete Confirmation Modal -->
+        <div class="modal fade" id="deleteModal" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">Confirm Delete</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Are you sure you want to delete employee <strong id="employeeName"></strong>?</p>
+                        <p class="text-muted">This action cannot be undone.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <form id="deleteForm" method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-trash me-1"></i>Delete
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function confirmDelete(employeeId, employeeName) {
+            document.getElementById('employeeName').textContent = employeeName;
+            document.getElementById('deleteForm').action = '/employees/delete/' + employeeId;
+            new bootstrap.Modal(document.getElementById('deleteModal')).show();
+        }
+    </script>
+</body>
+</html>
