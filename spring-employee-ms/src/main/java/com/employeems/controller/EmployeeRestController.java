@@ -22,7 +22,26 @@ public class EmployeeRestController {
     
     @Autowired
     private EmployeeService employeeService;
-    
+
+    // Health check endpoint
+    @GetMapping("/health")
+    public ResponseEntity<Map<String, Object>> healthCheck() {
+        Map<String, Object> response = new HashMap<>();
+        try {
+            long count = employeeService.countActiveEmployees();
+            response.put("status", "UP");
+            response.put("message", "Employee Management System is running!");
+            response.put("timestamp", System.currentTimeMillis());
+            response.put("employeeCount", count);
+            response.put("database", "MySQL - ems");
+            return ResponseEntity.ok(response);
+        } catch (Exception e) {
+            response.put("status", "DOWN");
+            response.put("message", "Database connection failed: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE).body(response);
+        }
+    }
+
     // Get all employees with pagination
     @GetMapping
     public ResponseEntity<Map<String, Object>> getAllEmployees(

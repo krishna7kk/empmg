@@ -1,0 +1,9 @@
+{
+    "firstName": "John",
+    "lastName": "Doe",
+    "email": "john.doe@company.com",
+    "department": "Engineering",
+    "position": "Software Engineer",
+    "hireDate": "2022-01-15",
+    "salary": 75000.00
+}

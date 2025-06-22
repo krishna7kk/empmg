@@ -128,4 +128,17 @@ public class EmployeeService {
     public boolean existsById(Long id) {
         return employeeRepository.existsById(id);
     }
+
+    // Count active employees
+    public long countActiveEmployees() {
+        return employeeRepository.countByIsActiveTrue();
+    }
+
+    // Update employee (alternative method signature)
+    public Employee updateEmployee(Employee employee) {
+        if (employee.getId() == null) {
+            throw new RuntimeException("Employee ID is required for update");
+        }
+        return updateEmployee(employee.getId(), employee);
+    }
 }

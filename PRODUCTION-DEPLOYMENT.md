@@ -71,7 +71,7 @@ After deployment, access your application at:
 | **Main App** | http://localhost:3000 | Complete web application |
 | **Backend API** | http://localhost:8080/api/demo/ | REST API endpoints |
 | **Health Check** | http://localhost:8080/api/demo/health | System status |
-| **Database Console** | http://localhost:8080/h2-console | H2 database management |
+| **Database** | localhost:3306 | MySQL database (ems) |
 
 ## 📊 Available Features
 

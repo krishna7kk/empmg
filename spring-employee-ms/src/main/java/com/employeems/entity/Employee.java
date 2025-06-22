@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 public class Employee {
     
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     
     @NotBlank(message = "First name is required")
