@@ -24,10 +24,10 @@ dist-ssr
 *.sw?
 
 # Java/Spring Boot
-spring-employee-ms/target/
-spring-employee-ms/.mvn/
-spring-employee-ms/mvnw
-spring-employee-ms/mvnw.cmd
+Backend/target/
+Backend/.mvn/
+Backend/mvnw
+Backend/mvnw.cmd
 *.jar
 *.war
 *.ear
@@ -62,9 +62,9 @@ bin/
 .env.development.local
 
 # Backend environment files
-spring-employee-ms/.env
-spring-employee-ms/.env.local
-spring-employee-ms/.env.production
+Backend/.env
+Backend/.env.local
+Backend/.env.production
 
 # Frontend environment files
 ems/.env.local

@@ -1,0 +1,22 @@
+-- H2 Database sample data
+INSERT INTO employees (first_name, last_name, email, department, position, hire_date, salary, is_active, created_at, updated_at) VALUES
+('John', 'Doe', 'john.doe@company.com', 'Engineering', 'Senior Software Engineer', '2022-01-15', 85000.00, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Jane', 'Smith', 'jane.smith@company.com', 'HR', 'HR Manager', '2021-03-10', 75000.00, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Mike', 'Johnson', 'mike.johnson@company.com', 'Sales', 'Sales Representative', '2022-06-20', 55000.00, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Sarah', 'Williams', 'sarah.williams@company.com', 'Marketing', 'Marketing Specialist', '2021-11-05', 60000.00, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('David', 'Brown', 'david.brown@company.com', 'Finance', 'Financial Analyst', '2022-02-28', 70000.00, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Emily', 'Davis', 'emily.davis@company.com', 'Engineering', 'Frontend Developer', '2022-08-12', 78000.00, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Robert', 'Miller', 'robert.miller@company.com', 'Operations', 'Operations Manager', '2021-05-18', 82000.00, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Lisa', 'Wilson', 'lisa.wilson@company.com', 'IT', 'System Administrator', '2022-04-03', 72000.00, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('James', 'Moore', 'james.moore@company.com', 'Legal', 'Legal Counsel', '2021-09-14', 95000.00, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Amanda', 'Taylor', 'amanda.taylor@company.com', 'Customer Service', 'Customer Service Manager', '2022-07-22', 58000.00, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Christopher', 'Anderson', 'chris.anderson@company.com', 'Engineering', 'Backend Developer', '2022-10-01', 80000.00, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Michelle', 'Thomas', 'michelle.thomas@company.com', 'HR', 'HR Specialist', '2022-03-15', 52000.00, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Kevin', 'Jackson', 'kevin.jackson@company.com', 'Sales', 'Sales Manager', '2021-07-08', 88000.00, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Nicole', 'White', 'nicole.white@company.com', 'Marketing', 'Digital Marketing Manager', '2021-12-20', 68000.00, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Daniel', 'Harris', 'daniel.harris@company.com', 'Finance', 'Senior Accountant', '2022-05-30', 65000.00, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Rachel', 'Martin', 'rachel.martin@company.com', 'Research & Development', 'Research Scientist', '2021-08-25', 92000.00, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Mark', 'Thompson', 'mark.thompson@company.com', 'IT', 'DevOps Engineer', '2022-09-10', 85000.00, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Jessica', 'Garcia', 'jessica.garcia@company.com', 'Operations', 'Project Coordinator', '2022-01-08', 55000.00, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Andrew', 'Martinez', 'andrew.martinez@company.com', 'Engineering', 'Software Architect', '2021-04-12', 105000.00, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP),
+('Stephanie', 'Robinson', 'stephanie.robinson@company.com', 'Customer Service', 'Customer Support Specialist', '2022-11-15', 45000.00, true, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP);

@@ -9,7 +9,7 @@ echo "[1/3] Starting Backend Server..."
 echo "Backend will run on: http://localhost:8080"
 echo
 
-cd spring-employee-ms
+cd Backend
 nohup java -jar target/employee-management-system-1.0.0.jar --spring.profiles.active=dev > backend.log 2>&1 &
 BACKEND_PID=$!
 echo "Backend started with PID: $BACKEND_PID"
@@ -63,7 +63,7 @@ echo "To stop the servers:"
 echo "  kill $BACKEND_PID $FRONTEND_PID"
 echo
 echo "To view logs:"
-echo "  Backend:  tail -f spring-employee-ms/backend.log"
+echo "  Backend:  tail -f Backend/backend.log"
 echo "  Frontend: tail -f ems/frontend.log"
 echo
 

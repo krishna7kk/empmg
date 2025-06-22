@@ -5,11 +5,11 @@
   "scripts": {
     "build": "cd ems && npm install && npm run build",
     "build:frontend": "cd ems && npm install && npm run build",
-    "build:backend": "cd spring-employee-ms && mvn clean package -DskipTests",
+    "build:backend": "cd Backend && mvn clean package -DskipTests",
     "start:frontend": "cd ems && npm run dev",
-    "start:backend": "cd spring-employee-ms && mvn spring-boot:run",
+    "start:backend": "cd Backend && mvn spring-boot:run",
     "install:frontend": "cd ems && npm install",
-    "install:backend": "cd spring-employee-ms && mvn clean install -DskipTests"
+    "install:backend": "cd Backend && mvn clean install -DskipTests"
   },
   "keywords": [
     "employee-management",

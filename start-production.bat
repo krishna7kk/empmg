@@ -8,7 +8,7 @@ echo [1/3] Starting Backend Server...
 echo Backend will run on: http://localhost:8080
 echo.
 
-cd spring-employee-ms
+cd Backend
 start "Employee Backend" java -jar target/employee-management-system-1.0.0.jar --spring.profiles.active=dev
 
 echo Waiting for backend to start...

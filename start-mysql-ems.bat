@@ -9,7 +9,7 @@ echo Database: ems
 echo Port: 8080
 echo.
 
-cd spring-employee-ms
+cd Backend
 
 echo Building application...
 call mvnw.cmd clean package -DskipTests

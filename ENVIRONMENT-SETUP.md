@@ -12,7 +12,7 @@ employee-ms/
 │   ├── .env                      # Development environment
 │   ├── .env.example              # Template file
 │   └── .env.production           # Production environment
-├── spring-employee-ms/           # Backend (Spring Boot)
+├── Backend/                      # Backend (Spring Boot)
 │   ├── .env                      # Development environment
 │   └── .env.example              # Template file
 └── .gitignore                    # Excludes sensitive .env files
@@ -49,7 +49,7 @@ const enableDemo = import.meta.env.VITE_ENABLE_DEMO_DATA === 'true';
 
 ## 🚀 **Backend Environment Variables (Spring Boot)**
 
-### **File: `spring-employee-ms/.env`**
+### **File: `Backend/.env`**
 
 ### **Key Variables:**
 ```bash
@@ -82,13 +82,13 @@ cp .env.example .env
 
 ### **2. Backend Setup**
 ```bash
-cd spring-employee-ms
+cd Backend
 cp .env.example .env
 # Edit .env with your database credentials
 ```
 
 ### **3. Update Database Credentials**
-Edit `spring-employee-ms/.env`:
+Edit `Backend/.env`:
 ```bash
 DB_PASSWORD=your-actual-password
 DB_NAME=your-database-name
@@ -136,7 +136,7 @@ VITE_DEBUG_MODE=false
 2. Use in code: `import.meta.env.VITE_NEW_FEATURE`
 
 **Backend (Spring Boot):**
-1. Add to `spring-employee-ms/.env`: `NEW_CONFIG=value`
+1. Add to `Backend/.env`: `NEW_CONFIG=value`
 2. Use in code: `@Value("${NEW_CONFIG}") String newConfig`
 
 ### **Environment Variable Validation**
@@ -147,11 +147,11 @@ Consider adding validation in your application startup to ensure required variab
 ### **1. Copy Template Files**
 ```bash
 cp ems/.env.example ems/.env
-cp spring-employee-ms/.env.example spring-employee-ms/.env
+cp Backend/.env.example Backend/.env
 ```
 
 ### **2. Update Database Credentials**
-Edit `spring-employee-ms/.env` with your MySQL credentials.
+Edit `Backend/.env` with your MySQL credentials.
 
 ### **3. Update Frontend API URL**
 Edit `ems/.env` if your backend runs on a different port.
@@ -159,7 +159,7 @@ Edit `ems/.env` if your backend runs on a different port.
 ### **4. Start Applications**
 ```bash
 # Backend
-cd spring-employee-ms && mvn spring-boot:run
+cd Backend && mvn spring-boot:run
 
 # Frontend
 cd ems && npm run dev

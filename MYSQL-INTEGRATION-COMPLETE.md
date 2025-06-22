@@ -106,14 +106,14 @@ start-mysql-ems.bat
 
 ### **Option 2: Manual Start**
 ```bash
-cd spring-employee-ms
+cd Backend
 mvnw clean package -DskipTests
 java -jar target/employee-management-system-1.0.0.jar
 ```
 
 ### **Option 3: Development Mode**
 ```bash
-cd spring-employee-ms
+cd Backend
 mvnw spring-boot:run
 ```
 
