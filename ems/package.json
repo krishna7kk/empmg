@@ -5,11 +5,13 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "npx tsc && vite build",
-    "build:vite": "vite build",
+    "build": "vite build",
+    "build:check": "tsc --noEmit && vite build",
+    "build:prod": "NODE_ENV=production vite build",
     "build:safe": "vite build --mode production",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "postinstall": "echo 'Dependencies installed successfully'"
   },
   "dependencies": {
     "lucide-react": "^0.344.0",

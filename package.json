@@ -1,0 +1,28 @@
+{
+  "name": "employee-management-system",
+  "version": "1.0.0",
+  "description": "Full-stack Employee Management System with React frontend and Spring Boot backend",
+  "scripts": {
+    "build": "cd ems && npm install && npm run build",
+    "build:frontend": "cd ems && npm install && npm run build",
+    "build:backend": "cd spring-employee-ms && mvn clean package -DskipTests",
+    "start:frontend": "cd ems && npm run dev",
+    "start:backend": "cd spring-employee-ms && mvn spring-boot:run",
+    "install:frontend": "cd ems && npm install",
+    "install:backend": "cd spring-employee-ms && mvn clean install -DskipTests"
+  },
+  "keywords": [
+    "employee-management",
+    "react",
+    "spring-boot",
+    "mysql",
+    "typescript",
+    "vite"
+  ],
+  "author": "krishna7kk",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
+  }
+}

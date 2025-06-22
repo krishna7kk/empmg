@@ -1,6 +1,6 @@
 [build]
-  # Build command for the frontend - Vite handles TypeScript
-  command = "cd ems && npm install && npm run build:safe"
+  # Build command for the frontend
+  command = "npm run build:frontend"
 
   # Directory to publish (frontend build output)
   publish = "ems/dist"
@@ -11,9 +11,12 @@
 [build.environment]
   # Node.js version
   NODE_VERSION = "18"
-  
+
   # Build environment
   NODE_ENV = "production"
+
+  # NPM configuration
+  NPM_FLAGS = "--production=false"
 
 # Redirect rules for SPA
 [[redirects]]
