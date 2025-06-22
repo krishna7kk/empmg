@@ -21,20 +21,28 @@ services:
       timeout: 20s
       retries: 10
 
-  # Uncomment below to run the Spring Boot app in Docker as well
-  # employee-app:
-  #   build: .
-  #   container_name: employee_app
-  #   restart: always
-  #   ports:
-  #     - "8080:8080"
-  #   depends_on:
-  #     mysql:
-  #       condition: service_healthy
-  #   environment:
-  #     SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/employee_management?useSSL=false&serverTimezone=UTC
-  #     SPRING_DATASOURCE_USERNAME: root
-  #     SPRING_DATASOURCE_PASSWORD: password
+  # Spring Boot Backend Application
+  employee-app:
+    build: .
+    container_name: employee_backend
+    restart: always
+    ports:
+      - "8080:8080"
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/employee_management?useSSL=false&serverTimezone=UTC
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: password
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SPRING_JPA_SHOW_SQL: false
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/api/demo/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
 volumes:
   mysql_data:
