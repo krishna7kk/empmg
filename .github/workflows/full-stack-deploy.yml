@@ -1,0 +1,133 @@
+name: Full Stack Deployment
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Deployment environment'
+        required: true
+        default: 'staging'
+        type: choice
+        options:
+        - staging
+        - production
+
+jobs:
+  build-frontend:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+        cache: 'npm'
+        cache-dependency-path: ems/package-lock.json
+        
+    - name: Install and build frontend
+      working-directory: ./ems
+      run: |
+        npm ci
+        npm run build
+      env:
+        NODE_ENV: production
+        VITE_API_BASE_URL: ${{ secrets.VITE_API_BASE_URL }}
+        
+    - name: Upload frontend artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: frontend-dist
+        path: ems/dist/
+
+  build-backend:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        java-version: '21'
+        distribution: 'temurin'
+        
+    - name: Build backend JAR
+      working-directory: ./Backend
+      run: mvn clean package -DskipTests -Pprod
+      
+    - name: Upload backend artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: backend-jar
+        path: Backend/target/*.jar
+
+  deploy:
+    needs: [build-frontend, build-backend]
+    runs-on: ubuntu-latest
+    environment: ${{ github.event.inputs.environment || 'staging' }}
+    
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      
+    - name: Download frontend artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: frontend-dist
+        path: ems/dist/
+        
+    - name: Download backend artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: backend-jar
+        path: Backend/target/
+        
+    - name: Setup Docker Buildx
+      uses: docker/setup-buildx-action@v3
+      
+    - name: Create environment file
+      run: |
+        echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}" > .env.production
+        echo "MYSQL_PASSWORD=${{ secrets.MYSQL_PASSWORD }}" >> .env.production
+        echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> .env.production
+        echo "FRONTEND_URL=${{ secrets.FRONTEND_URL }}" >> .env.production
+        echo "BACKEND_URL=${{ secrets.BACKEND_URL }}" >> .env.production
+        
+    - name: Deploy with Docker Compose
+      run: |
+        docker-compose -f docker-compose.production.yml --env-file .env.production up -d --build
+        
+    - name: Health check
+      run: |
+        sleep 60
+        curl -f http://localhost:8080/api/demo/health || exit 1
+        
+    - name: Cleanup old images
+      run: |
+        docker image prune -f
+        
+  notify:
+    needs: [deploy]
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+    - name: Notify deployment status
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        channel: '#deployments'
+        text: |
+          Deployment ${{ job.status }}!
+          Environment: ${{ github.event.inputs.environment || 'staging' }}
+          Commit: ${{ github.sha }}
+          Author: ${{ github.actor }}
+      env:
+        SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      if: env.SLACK_WEBHOOK_URL != null
