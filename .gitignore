@@ -57,4 +57,16 @@ bin/
 # Environment files
 .env
 .env.local
-.env.production
+.env.development
+.env.production.local
+.env.development.local
+
+# Backend environment files
+spring-employee-ms/.env
+spring-employee-ms/.env.local
+spring-employee-ms/.env.production
+
+# Frontend environment files
+ems/.env.local
+ems/.env.development.local
+ems/.env.production.local
