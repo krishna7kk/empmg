@@ -1,5 +1,8 @@
+# Alternative Dockerfile with more reliable base images
+# Use this if the main Dockerfile has image availability issues
+
 # Multi-stage build for Spring Boot application
-FROM maven:3.9.5-openjdk-21 AS build
+FROM maven:3.9.5-openjdk-21-slim AS build
 
 # Set working directory
 WORKDIR /app
@@ -12,15 +15,17 @@ RUN mvn dependency:go-offline -B
 COPY src ./src
 RUN mvn clean package -DskipTests
 
-# Runtime stage
+# Runtime stage - using official OpenJDK
 FROM openjdk:21-jre-slim
+
+# Install curl for health checks
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 
 # Set working directory
 WORKDIR /app
 
-# Install curl for health checks and create non-root user
-RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/* && \
-    groupadd -r spring && useradd -r -g spring spring
+# Create non-root user
+RUN groupadd -r spring && useradd -r -g spring spring
 USER spring:spring
 
 # Copy jar from build stage
