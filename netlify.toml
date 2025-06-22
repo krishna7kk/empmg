@@ -1,12 +1,12 @@
 [build]
   # Build command for the frontend
-  command = "npm run build:frontend"
+  command = "npm install && npm run build"
 
   # Directory to publish (frontend build output)
-  publish = "ems/dist"
+  publish = "dist"
 
-  # Base directory
-  base = "."
+  # Base directory - run commands from ems folder
+  base = "ems"
 
 [build.environment]
   # Node.js version
